@@ -1,113 +1,48 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
+<!-- Copyright (C) 2023-2025 anonymous
 
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
+This file is part of PSFree.
 
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
+PSFree is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
 
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
+PSFree is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <title>PSFree-Lapse Exploit For PS4 9.00</title>
+        <style>
+            @font-face {
+                font-family: 'logging';
+                src: url('fonts/LiberationMono-Regular.ttf');
             }
+            #console {
+                font-family: 'logging';
+            }
+        </style>
+        <script>
+        if (window.applicationCache.status=='0')
+        {
+          window.location.replace("cache.html");
         }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PSFree: A PS4/PS5 Exploit Chain</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @font-face {
-            font-family: 'LiberationMono';
-            src: url('fonts/LiberationMono-Regular.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-        body {
-            font-family: 'LiberationMono', monospace;
-            background-color: #1a202c;
-            color: #e2e8f0;
-        }
-    </style>
-</head>
-<body class="min-h-screen flex flex-col">
-    <!-- Navigation Bar -->
-    <nav class="bg-gray-900 p-4 shadow-md">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="index.html" class="text-2xl font-bold text-blue-400">PSFree</a>
-            <div class="space-x-4">
-                <a href="index.html" class="text-gray-300 hover:text-blue-400 transition">Home</a>
-                <a href="about.html" class="text-gray-300 hover:text-blue-400 transition">About</a>
-                <a href="cache.html" class="text-gray-300 hover:text-blue-400 transition">Cache</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="container mx-auto flex-grow flex items-center justify-center py-12">
-        <div class="text-center">
-            <h1 class="text-4xl md:text-5xl font-bold text-blue-400 mb-6">PSFree: A PS4/PS5 Exploit Chain</h1>
-            <p class="text-lg text-gray-300 mb-8">An open-source exploit chain for PS4 and PS5. Free and licensed under GNU-AGPL-3.0-or-later.</p>
-            
-            <!-- Donation Section -->
-            <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-md mx-auto">
-                <h2 class="text-xl font-semibold text-gray-200 mb-4">Support PSFree</h2>
-                <p class="text-gray-400 mb-2">Donation (Monero/XMR):</p>
-                <p class="text-sm text-gray-300 break-all bg-gray-900 p-2 rounded">86Fk3X9AE94EGKidzRbvyiVgGNYD3qZnuKNq1ZbsomFWXHYm6TtAgz9GNGitPWadkS3Wr9uXoT29U1SfdMtJ7QNKQpW1CVS</p>
-            </div>
-
-            <!-- License Link -->
-            <p class="mt-8 text-gray-400">See <a href="about.html" class="text-blue-400 hover:underline">JavaScript license information</a> for the source code and license.</p>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-gray-900 p-4 text-center text-gray-400">
-        <p>&copy; 2025 PSFree. Licensed under GNU-AGPL-3.0-or-later.</p>
-    </footer>
-
-    <!-- Existing JavaScript Files -->
-    <script type="module" src="psfree.mjs"></script>
-    <script type="module" src="alert.mjs"></script>
-    <script type="module" src="config.mjs"></script>
-    <script type="module" src="send.mjs"></script>
-    <script type="module" src="scripts/lapse.mjs"></script>
-    <script type="module" src="rop/800.mjs"></script>
-    <script type="module" src="module/chain.mjs"></script>
-    <script type="module" src="module/int64.mjs"></script>
-    <script type="module" src="module/view.mjs"></script>
-    <script type="module" src="module/memtools.mjs"></script>
-    <script type="module" src="module/utils.mjs"></script>
-    <script type="module" src="module/rw.mjs"></script>
-    <script type="module" src="module/offset.mjs"></script>
-    <script type="module" src="module/mem.mjs"></script>
-</body>
+        </script>
+    </head>
+    <body>
+        PSFree: A PS4/PS5 Exploit Chain<br>
+        Donation (Monero/XMR):<br>
+        86Fk3X9AE94EGKidzRbvyiVgGNYD3qZnuKNq1ZbsomFWXHYm6TtAgz9GNGitPWadkS3Wr9uXoT29U1SfdMtJ7QNKQpW1CVS<br>
+        See <a href='./about.html' data-jslicense='1'>JavaScript license information</a> for the
+        source code and license.<br>
+        <pre id='console'></pre>
+    </body>
+    <script src="./payload.js"></script>
+    <script type='module' src='./alert.mjs'></script>
 </html>
