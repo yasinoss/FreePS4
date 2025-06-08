@@ -880,7 +880,7 @@ async function main() {
 
     clear_log();
     // path to your script that will use the exploit
-    import('./lapse.js');
+    import('lapse.js');
 }
 //main();
 setTimeout(main, 1500);
